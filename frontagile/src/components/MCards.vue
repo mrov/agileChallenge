@@ -28,11 +28,12 @@ export default {
 .m-card {
   cursor: pointer;
   width: 335px;
-  height: 280px;
+  height: 270px;
   box-shadow: 0 0 14px 2px #8888887a;
   border-radius: 20px;
   color: #36578c;
   margin-top: 1.6rem;
+  margin-bottom: 3rem;
   div {
     padding: 1.4rem 0rem 0rem 1.6rem;
   }
