@@ -14,7 +14,7 @@ var metricsRouter = require('./routes/metrics');
 
 var app = express();
 
-mongoose.connect('mongodb://localhost:27017/agileTest', { useNewUrlParser: true });
+mongoose.connect('mongodb://root:root123@ds225205.mlab.com:25205/agilechallengedb', { useNewUrlParser: true });
 
 app.use(logger('dev'));
 app.use(cors());
