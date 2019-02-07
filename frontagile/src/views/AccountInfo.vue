@@ -20,32 +20,36 @@
         <div class="col-12 form-section">
           <div class="form-group row">
             <label for="firstName">*First Name:</label>
-            <div class="col-10">
+            <div class="col-10 col-md-8">
               <input :disabled="edit" v-model="form.firstName" class="w-60p" type="text" id="firstName" placeholder="First Name">
+              <small>{{errors.firstName}}</small>
             </div>
           </div>
           <div class="form-group row">
             <label for="middleName">Middle Name:</label>
-            <div class="col-10">
+            <div class="col-10 col-md-8">
               <input :disabled="edit" v-model="form.middleName" class="w-60p" type="text" id="middleName" placeholder="Middle Name">
             </div>
           </div>
           <div class="form-group row">
             <label for="lastName">*Last Name:</label>
-            <div class="col-10">
+            <div class="col-10 col-md-8">
               <input :disabled="edit" v-model="form.lastName" class="w-60p" type="text" id="lastName" placeholder="Last Name">
+              <small>{{errors.lastName}}</small>
             </div>
           </div>
           <div class="form-group row">
             <label for="birthDate">*Birth Date:</label>
-            <div class="col-10">
+            <div class="col-10 col-md-8">
               <input :disabled="edit" v-model="form.birthDate" class="w-60p" type="text" id="birthDate" placeholder="MMM dd yyyy">
+              <small>{{errors.birthDate}}</small>
             </div>
           </div>
           <div class="form-group row">
             <label for="email">*Email:</label>
-            <div class="col-10">
+            <div class="col-10 col-md-8">
               <input :disabled="edit" v-model="form.email" class="w-60p" type="text" id="email" placeholder="Email">
+              <small>{{errors.email}}</small>
             </div>
           </div>
         </div>
@@ -55,7 +59,7 @@
         <div class="col-12 form-section">
           <div class="form-group row">
             <label for="country">*Country:</label>
-            <div class="col-10">
+            <div class="col-10 col-md-8">
               <select :disabled="edit" v-model="form.country" class="custom-select w-60p" id="country">
                 <option value="Brazil" selected>Brazil</option>
               </select>
@@ -63,7 +67,7 @@
           </div>
           <div class="form-group row">
             <label for="state">*State:</label>
-            <div class="col-10">
+            <div class="col-10 col-md-8">
               <select :disabled="edit" @change="stateChange()" v-model="form.state" class="custom-select w-60p" id="state">
                 <option v-for="(state, index) in brazilGeo.estados"
                   :key="index"
@@ -73,7 +77,7 @@
           </div>
           <div class="form-group row">
             <label for="city">*City:</label>
-            <div class="col-10">
+            <div class="col-10 col-md-8">
               <select :disabled="edit" v-model="form.city" class="custom-select w-60p" id="city">
                 <option v-for="(city, index) in cities"
                   :key="index"
@@ -83,20 +87,22 @@
           </div>
           <div class="form-group row">
             <label for="addressline1">*Address Line 1:</label>
-            <div class="col-10">
+            <div class="col-10 col-md-8">
               <input :disabled="edit" v-model="form.firstAddressLine" class="w-60p" type="text" id="addressline1" placeholder="Address Line 1">
+              <small>{{errors.firstAddressLine}}</small>
             </div>
           </div>
           <div class="form-group row">
             <label for="addressline2">Address Line 2:</label>
-            <div class="col-10">
+            <div class="col-10 col-md-8">
               <input :disabled="edit" v-model="form.scndAddressLine" class="w-60p" type="text" id="addressline2" placeholder="Address Line 2">
             </div>
           </div>
           <div class="form-group row">
             <label for="zip">*ZIP/Postal Code:</label>
-            <div class="col-10">
+            <div class="col-10 col-md-8">
               <input :disabled="edit" v-model="form.zipCode" class="zipcode" type="text" id="zip" placeholder="ZIP/Postal Code">
+              <small>{{errors.zipCode}}</small>
             </div>
           </div>
         </div>
@@ -155,7 +161,7 @@ export default {
         state: 'Acre',
         zipCode: '',
       },
-      errors: {},
+      errors: {'birthDate':'','email':'','firstAddressLine':'','firstName':'',"lastName":'','zipCode':''},
       brazilGeo: brazilGeo,
       cities: [],
       edit: true,
@@ -186,13 +192,14 @@ export default {
       }
     },
     formSubmit: async function() {
-      var anyBlank = true;
+      var anyBlank = false;
       var birthDate = new Date(this.form.birthDate);
-      // Check if any field is empty or only spaced
+      // Check if the required fields are empty or only spaced
       for (const key in this.form) {
         if (key !== 'scndAddressLine' && key !== 'middleName') {
           const formValue = this.form[key];
-          anyBlank = this.IsBlank(formValue);
+          if (this.IsBlank(formValue)) { this.errors[key] = 'Field Required'; anyBlank = true }
+          else { this.errors[key] = ''; }
         }
       }
       // validate notBlank fields, birth date and email format
@@ -200,8 +207,9 @@ export default {
           var result = await this.updateUser({id: this.currentUserId, form: this.form});
           this.$router.push('/');
       }
-      if (!emailRegex.test(this.form.email)) { console.log("Wrong Email Format"); }
-      if (birthDate == 'Invalid Date') { console.log("Wrong Birth Date Format"); }
+      if (!emailRegex.test(this.form.email)) { this.errors['email'] = 'Wrong Email Format'; }
+      if (birthDate == 'Invalid Date') { this.errors['birthDate'] = 'Wrong Birth Date Format (Jun 17 1995)'; }
+      window.scrollTo(0, 0)
     },
     formCancel () {
       console.log("moabe");
@@ -282,14 +290,23 @@ export default {
     position: relative;
     top: -6px;
   }
-  div input {
-    padding: 0.55em 0px 0.55em 0.75em;
+  div {
+    display: flex;
+    flex-direction: column;
+    small {
+      color: red;
+      margin-top: .50em;
+    }
+    input {
+      padding: 0.55em 0px 0.55em 0.75em;
+    }
+    input:disabled {
+      background-color: white;
+      border-style: groove;
+      color: black;
+    }
   }
-  div input:disabled {
-    background-color: white;
-    border-style: groove;
-    color: black;
-  }
+
   div input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
     font-style: italic;
   }
@@ -321,6 +338,7 @@ export default {
   display: flex;
   margin-top: 2em;
   margin-left: 11em;
+  flex-direction: row !important;
   label {
     position: relative;
     top: 9px;

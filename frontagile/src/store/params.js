@@ -1,4 +1,4 @@
-export const baseUrl = 'http://localhost:3000'
+export const baseUrl = 'https://agilechallengebackend.herokuapp.com'
 export const monthsAbbrev = ['JAN', 'FEB', 'MAR', 'APR', 'MAY',
 'JUN', 'JUL', 'AUG', 'SEP',
 'OCT', 'NOV', 'DEC']

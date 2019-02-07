@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-9">
+      <div class="col-lg-9 col-md-12">
         <div class="sub-header">
           <router-link to="" class="card-link">
             <div class="sub-menus">
@@ -53,18 +53,18 @@
           </router-link>
         </div>
         <div class="row cards-wrapper">
-          <div class="col-6">
+          <div class="col-lg-5 col-md-6">
             <MCards icon="far fa-user-circle" title="Account Info" linkTo="/AccountInfo" />
           </div>
-          <div class="col-6">
+          <div class="col-lg-5 col-md-6">
             <MCards icon="far fa-id-card" title="Create New Account" linkTo="/NewAccount" />
           </div>
-          <div class="col-6">
+          <div class="col-lg-5 col-md-6">
             <MCards icon="far fa-file" title="Trial Accounts Info" linkTo="/AccountHistory" />
           </div>
         </div>
       </div>
-      <div class="col-3 metrics">
+      <div class="col-lg-3 col-md-12 metrics">
         <p class="metrics-title">Metrics</p>
         <MetricsCard
           v-for="(metric, index) in metrics"
@@ -145,8 +145,8 @@ export default {
 }
 
 .cards-wrapper {
-  justify-content: space-around;
-  margin-left: 4rem;
+  justify-content: space-evenly;
+  margin: 0 2em;
 }
 
 .metrics {

@@ -35,7 +35,7 @@ export default {
 
 .m-card {
   cursor: pointer;
-  width: 335px;
+  width: 100%;
   height: 270px;
   box-shadow: 0 0 14px 2px #8888887a;
   border-radius: 20px;
