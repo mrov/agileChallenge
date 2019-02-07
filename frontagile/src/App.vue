@@ -6,7 +6,7 @@
 
 <style lang="stylus">
   #app {
-    padding-bottom: 1rem;
+    
   }
   .p-0 {
     padding: 0px !important;

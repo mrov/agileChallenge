@@ -7,11 +7,11 @@
           <p>
             ID:
           </p>
-          <select class="custom-select">
-            <option selected>ID</option>
-            <option value="1">One</option>
-            <option value="2">Two</option>
-            <option value="3">Three</option>
+          <select @change="selectUserHandler()" v-model="currentUserId" class="custom-select">
+            <option hidden selected>ID</option>
+            <option v-for="(user, index) in users"
+            :key="index"
+            :value="user._id">{{user._id}} - {{user.firstName}} {{user.lastName}}</option>
           </select>
         </div>
         <div class="table-wrapper">
@@ -21,15 +21,10 @@
               <th>Date</th> 
               <th>Time</th>
             </tr>
-            <tr>
-              <td>Creation</td>
-              <td>23/02/2017</td> 
-              <td>08:45:35</td>
-            </tr>
-            <tr>
-              <td>Edition</td>
-              <td>23/02/2017</td> 
-              <td>08:45:35</td>
+            <tr v-for="(record, index) in history" :key="index">
+              <td>{{record.type}}</td>
+              <td>{{record.formatedDate}}</td> 
+              <td>{{record.formatedHour}}</td>
             </tr>
           </table>
         </div>
@@ -39,13 +34,38 @@
 </template>
 
 <script>
-import NavSection from "@/components/NavSection.vue"
+import NavSection from "@/components/NavSection.vue";
+import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "AccountHistory",
+  data () {
+    return {
+      currentUserId: 'ID',
+      history: []
+    }
+  },
   components: {
     NavSection,
   },
+  computed: {
+    ...mapGetters({
+      users: 'user/users'
+    })
+  },
+  methods: {
+    ...mapActions({
+      getTrialUsers: 'user/getTrialUsers',
+      getHistory: 'user/getHistory',
+    }),
+    selectUserHandler: async function () {
+      var result = await this.getHistory(this.currentUserId);
+      this.history = result.data.history;
+    }
+  },
+  beforeMount: async function () {
+    await this.getTrialUsers();
+  }
 };
 </script>
 

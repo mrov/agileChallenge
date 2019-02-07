@@ -2,12 +2,8 @@ var express = require('express');
 var router = express.Router();
 var userController = require("../controllers/user");
 
-/* GET users listing. */
-router.get('/', function(req, res) {
-  console.log(req.method);
-  res.send('respond with a resource');
-});
-
+/* GET users listing {id, firstname, lastname}. */
+router.get('', userController.findIdAndNames);
 /* Get history by user id */
 router.get('/history/:_id', userController.findHistorybyId);
 /* Get user by id */

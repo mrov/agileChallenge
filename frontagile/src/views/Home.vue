@@ -3,58 +3,78 @@
     <div class="row">
       <div class="col-12 header">
         <div class="icons">
-          <i class="fas fa-camera"></i>
-          <i class="fas fa-user"></i>
-          <i class="fas fa-envelope"></i>
-          <i class="fas fa-cog"></i>
+          <router-link to="">
+            <i class="fas fa-camera"></i>
+          </router-link>
+          <router-link to="">
+            <i class="fas fa-user"></i>
+          </router-link>
+          <router-link to="">
+            <i class="fas fa-envelope"></i>
+          </router-link>
+          <router-link to="">
+            <i class="fas fa-cog"></i>
+          </router-link>
         </div>
       </div>
     </div>
     <div class="row">
       <div class="col-9">
         <div class="sub-header">
-          <div class="sub-menus">
-            <i class="far fa-chart-bar"></i>
-            <p>Vertical</p>
-          </div>
-          <div class="sub-menus">
-            <i class="fas fa-atom"></i>
-            <p>Product Type</p>
-          </div>
-          <div class="sub-menus">
-            <i class="fas fa-ellipsis-h"></i>
-            <p>Process</p>
-          </div>
-          <div class="sub-menus">
-            <i class="fas fa-tape"></i>
-            <p>ST Family</p>
-          </div>
-          <div class="sub-menus">
-            <i class="far fa-minus-square"></i>
-            <p>MM</p>
-          </div>
+          <router-link to="" class="card-link">
+            <div class="sub-menus">
+              <i class="far fa-chart-bar"></i>
+              <p>Vertical</p>
+            </div>
+          </router-link>
+          <router-link to="" class="card-link">
+            <div class="sub-menus">
+              <i class="fas fa-atom"></i>
+              <p>Product Type</p>
+            </div>
+          </router-link>
+          <router-link to="" class="card-link">
+            <div class="sub-menus">
+              <i class="fas fa-ellipsis-h"></i>
+              <p>Process</p>
+            </div>
+          </router-link>
+          <router-link to="" class="card-link">
+            <div class="sub-menus">
+              <i class="fas fa-tape"></i>
+              <p>ST Family</p>
+            </div>
+          </router-link>
+          <router-link to="" class="card-link">
+            <div class="sub-menus">
+              <i class="far fa-minus-square"></i>
+              <p>MM</p>
+            </div>
+          </router-link>
         </div>
         <div class="row cards-wrapper">
           <div class="col-6">
-            <MCards icon="far fa-user-circle" title="Account Info" />
+            <MCards icon="far fa-user-circle" title="Account Info" linkTo="/AccountInfo" />
           </div>
           <div class="col-6">
-            <MCards icon="far fa-id-card" title="Create New Account" />
+            <MCards icon="far fa-id-card" title="Create New Account" linkTo="/NewAccount" />
           </div>
           <div class="col-6">
-            <MCards icon="far fa-file" title="Trial Accounts Info" />
+            <MCards icon="far fa-file" title="Trial Accounts Info" linkTo="/AccountHistory" />
           </div>
         </div>
       </div>
       <div class="col-3 metrics">
         <p class="metrics-title">Metrics</p>
         <MetricsCard
-          title="Total MM Iventory Units"
-          currency="number"
-          value="123,34"
-          icon="fas fa-atom"
-          signal="negative"
-          :objects="[{name: 'Desktop', metric: 41.786}, {name: 'Server', metric: 81.901}, {name: 'Mobile', metric: 63.099}, {name: 'Server', metric: 81.901}, {name: 'Mobile', metric: 63.099}, ]" />
+          v-for="(metric, index) in metrics"
+          :key=index
+          :title="metric.title"
+          :currency="metric.currency"
+          :value="metric.value"
+          :icon="metric.icon"
+          :signal="metric.signal"
+          :objects="metric.objects" />
       </div>
     </div>
   </div>
@@ -63,13 +83,27 @@
 <script>
 import MetricsCard from '@/components/MetricsCard.vue';
 import MCards from '@/components/MCards.vue';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'home',
   components: {
     MetricsCard,
-    MCards
+    MCards,
   },
+  computed: {
+    ...mapGetters({
+      metrics: 'metrics/metrics'
+    })
+  },
+  methods: {
+    ...mapActions({
+      getMetrics: 'metrics/getMetrics',
+    }),
+  },
+  beforeMount: async function () {
+    await this.getMetrics();
+  }
 };
 </script>
 
@@ -100,6 +134,14 @@ export default {
       margin-right: 6px;
     }
   }
+  .card-link {
+    color: #36578c;
+    margin-left: 0px;
+  }
+  .card-link:hover {
+    text-decoration: none;
+    color: #36578c;
+  }
 }
 
 .cards-wrapper {
@@ -120,6 +162,4 @@ export default {
 .last-card {
   margin-top: 5rem;
 }
-
-
 </style>

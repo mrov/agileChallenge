@@ -50,9 +50,6 @@ export default {
       required: true,
     },
   },
-  beforeMount () {
-    console.log(this.objects);
-  }
 };
 </script>
 

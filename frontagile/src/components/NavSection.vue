@@ -3,7 +3,9 @@
     <div class="blue-line">
     </div>
     <div class="nav-wrapper">
-      <p class="back-arrow fas fa-angle-left"></p>
+      <router-link to="/">
+        <p class="back-arrow fas fa-angle-left"></p>
+      </router-link>
       <p class="title">{{title}}</p>
     </div>
   </div>

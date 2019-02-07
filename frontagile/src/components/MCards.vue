@@ -1,9 +1,13 @@
 <template>
-  <div class="m-card">
-    <div>
-      <i :class=icon></i>
-      <h3>{{title}}</h3>
-    </div>
+  <div>
+    <router-link :to="linkTo" class="card-link">
+      <div class="m-card">
+        <div>
+          <i :class=icon></i>
+          <h3>{{title}}</h3>
+        </div>
+      </div>
+    </router-link>
   </div>
 </template>
 
@@ -13,11 +17,15 @@ export default {
   props: {
     icon: {
       type: String,
-      required: true
+      required: true,
     },
     title: {
       type: String,
-      required: true
+      required: true,
+    },
+    linkTo: {
+      type: String,
+      required: true,
     },
   }
 };
