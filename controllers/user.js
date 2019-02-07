@@ -5,7 +5,20 @@ var controller = {
     let _id = req.params._id || req.query._id;
 
     User.findById(_id)
-    .select("-history")
+    .select("-history -__v -_id")
+      .then(user => {
+        res.status(200).json(user);
+      })
+      .catch(err => {
+        res.status(500).json(err);
+      })
+  },
+  findIdAndNames: (req, res) => {
+    let accountType = req.query.accountType;
+    let query = {}
+    if (accountType === 'Trial') { query = {accountType: 'Trial'} }
+    User.find(query)
+    .select("_id firstName lastName")
       .then(user => {
         res.status(200).json(user);
       })
@@ -28,7 +41,9 @@ var controller = {
   createUser: (req, res) => {
     let data = {}
     let _id = req.params._id || req.query._id;
-    let nowDate = new Date();  
+    let nowDate = new Date();
+    console.log(req.body.birthDate);
+    console.log(new Date(req.body.birthDate));
     
     // i could do a for/in but its easier to see the fields that way
     data['firstName'] = req.body.firstName;
@@ -44,15 +59,15 @@ var controller = {
     data['zipCode'] = req.body.zipCode;
     data['accountType'] = req.body.accountType;
 
-    var user = new User(data);
-
     if (req.method === "POST") {
       data['history'] = {type: 'Creation', date: nowDate, formatedDate: getFormatedDate(nowDate), formatedHour: getFormatedHour(nowDate)};
+      var user = new User(data);
       user.save(function (err, newUser) {
         if (err) res.status(500).json(err);
         res.status(200).json(newUser);
       })
     } else if (req.method === "PUT") {
+      var user = new User(data);
       if (_id) {
         let history = {type: 'Edition', date: nowDate, formatedDate: getFormatedDate(nowDate), formatedHour: getFormatedHour(nowDate)};
         User.findOneAndUpdate(

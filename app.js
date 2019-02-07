@@ -4,6 +4,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var stylus = require('stylus');
 var bodyParser = require('body-parser');
+var cors = require('cors');
 var mongoose = require('mongoose');
 
 
@@ -16,6 +17,7 @@ var app = express();
 mongoose.connect('mongodb://localhost:27017/agileTest', { useNewUrlParser: true });
 
 app.use(logger('dev'));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
